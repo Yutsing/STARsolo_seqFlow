@@ -61,31 +61,43 @@ STAR --runThreadN 4 \
 ```
 
 ## 相关命令解释
---runThreadN 4
+`--runThreadN 4`
 >>>采用四个线程运行程序.
---genomeDir mm10/star_index
+
+`--genomeDir mm10/star_index`
 >>>指向star的索引的目录。本实验的数据来自上述论文的公开数据小鼠大脑的单细胞测序。
---readFilesCommand zcat
+
+`--readFilesCommand zcat`
 >>>fastq文件是.gz的被压缩状态，所以用zcat来提取内容。
---outFileNamePrefix split-seq/star_outs/
+
+`--outFileNamePrefix split-seq/star_outs/`
 >>>指向输出文件目录。所有的输出内容都将被放入split-seq/star_outs/目录下。
---readFilesIn split-seq/data/SRR6750042_1.fastq.gz split-seq/data/SRR6750042_2.fastq.gz
+
+`--readFilesIn split-seq/data/SRR6750042_1.fastq.gz split-seq/data/SRR6750042_2.fastq.gz`
 >>>我们应该在这里放两个文件，第一个文件是来自 cDNA 的读数，第二个文件应包含细胞条形码和 UMI。在SPLiT-seq中，cDNA reads 来自 Read 1，cell barcode 和 UMI 来自 Read 2。
---soloType CB_UMI_Complex
+
+`--soloType CB_UMI_Complex`
 >>>由于 Read 2 不仅有细胞条形码和 UMI，还有常见的 linker sequences。细胞条形码是非连续的，由连接序列分隔。在这种情况下，我们须使用CB_UMI_Complex选项。
---soloCBposition和--soloUMIposition
+
+`--soloCBposition和--soloUMIposition`
 >>>这些选项指定了我们传给的第二个 fastq 文件中细胞条形码和 UMI 的位置。
---soloCBwhitelist
+
+`--soloCBwhitelist`
 >>>细胞条形码由三个不连续的部分组成：三轮条形码。这里的白名单是这三个列表的组合。我们应该按照指定的顺序分别提供它们，并star负责组合。
---soloCBmatchWLtype 1MM
+
+`--soloCBmatchWLtype 1MM`
 >>>设置细胞条形码reads与白名单匹配的严格程度。简单起见这里设置为1MM。
---soloCellFilter EmptyDrops_CR
+
+`--soloCellFilter EmptyDrops_CR`
 >>>实验从来都不是完美的。即使是从空液滴中我们也能获得一些读数。一般来说，这些空液滴的读数数量应该比带有细胞的液滴小几个数量级。为了识别出真正的细胞，可以应用不同的算法。在这里我们使用最常用的参数EmptyDrops_CR。
---soloStrand Forward
+
+`--soloStrand Forward`
 >>>该参数的选择取决于 cDNA 读数的来源。如果 cDNA 读数来自与 mRNA 相同的链（编码链），则此参数将为Forward（这是默认值）。如果它们来自与 mRNA 相反的链，通常称为第一链，则此参数将为Reverse。对于SPLiT-seq，cDNA 读数来自 Read 1 文件。在实验过程中，mRNA 分子被包含 UMI 的条形码 oligo-dT 引物捕获，随后 Illumina Read 2 序列将连接到这一端。因此，Read 2 由 RT 条形码和 UMI 组成。它们来自第一链，与编码链互补。Read 1 来自编码链。因此，对SPLiT -seq数据应使用Forward。
---outSAMattributes CB UB
+
+`--outSAMattributes CB UB`
 >>>我们希望在输出的属性中分别包含细胞条形码CB和UMI序列UB，这些信息将对下游分析有很大帮助。
---outSAMtype BAM SortedByCoordinate
+
+`--outSAMtype BAM SortedByCoordinate`
 >>>对输出的sam格式进行bam处理以便其他程序处理。
 
 如果程序顺利执行，输出的目录格式应该如下：
